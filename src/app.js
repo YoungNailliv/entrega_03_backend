@@ -1,29 +1,19 @@
 import express from "express";
-import  ProductManager  from "./productManager.js";
+import { config } from "./config.js";
+import userRoutes from "./routes/products.routes.js"
+import cartRoutes from "./routes/cart.routes.js"
 
 const app = express();
-const manager = new ProductManager("../products.json");
-const PORT = 8080;
+app.use( express.json() );
+app.use(express.urlencoded( {extended:true} ));
 
-app.get("/", (req,res) => {
-    res.send("Hola!")
-});
 
-app.get("/products", async(req,res) => {
-    
-    let limit = parseInt(req.query.limit) || 0;
-    let products = await manager.getProducts(limit);
-    res.send( { status: 200, payload: products }  );
+app.use('/api/products', userRoutes);
+app.use('/api/carts', cartRoutes);
 
-})
 
-app.get("/product/:id", async(req,res) => {
-    let id = req.params.id;
-    let product = await manager.getProductById(parseInt(id));
 
-    res.send( {status:200, payload:product} );
-})
-
-app.listen(PORT, () => {
-    console.log(`Escuchando desde el puerto ${PORT}`)
+app.listen(config.PORT, () => {
+    console.log(`Escuchando desde el puerto ${config.PORT}`)
+    console.log(config.DIRNAME); 
 })

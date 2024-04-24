@@ -23,12 +23,41 @@ class ProductManager {
         const exist = this.products.some( (product) => product.code === productoAgregar.code )
         
         if(!exist){
-            this.products.push({ ...productoAgregar, id:this.products.length + 1} );
+            this.products.push({ ...productoAgregar, id:this.products[-1].id + 1} );
             await fs.promises.writeFile(this.file, JSON.stringify(this.products), "utf-8")
             console.log("Producto agregado")
         }else{
             console.log("Este producto ya existe")
         };
+    };
+
+    async deleteProduct ( productoEliminar ){
+
+        await this.getProducts(0);
+
+        const exist = this.products.find( (product) => product.id === productoEliminar);
+
+        if(exist){
+            this.products = this.products.filter( product => product.id !== productoEliminar)
+            await fs.promises.writeFile(this.file, JSON.stringify(this.products), "utf-8")
+        } else {
+            console.log( `No existe el producto con el id ${productoEliminar}` )
+        }
+    };
+
+    async updateProduct ( id, newProduct) {
+        await this.getProducts(0);
+
+        const exist = this.products.find( (product) => product.id === id);
+
+        if(exist){
+            const index = this.products.findIndex((product) => product.id === id);
+            this.products[index] = {...newProduct,id:exist.id};
+            console.log(this.products);
+            await fs.promises.writeFile(this.file, JSON.stringify(this.products), "utf-8");
+        } else {
+            console.log("Ese producto no existe");
+        }
     };
 
     async getProductById (productId){
