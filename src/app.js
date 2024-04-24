@@ -15,5 +15,4 @@ app.use('/api/carts', cartRoutes);
 
 app.listen(config.PORT, () => {
     console.log(`Escuchando desde el puerto ${config.PORT}`)
-    console.log(config.DIRNAME); 
-})
+});

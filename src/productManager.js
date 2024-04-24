@@ -53,7 +53,6 @@ class ProductManager {
         if(exist){
             const index = this.products.findIndex((product) => product.id === id);
             this.products[index] = {...newProduct,id:exist.id};
-            console.log(this.products);
             await fs.promises.writeFile(this.file, JSON.stringify(this.products), "utf-8");
         } else {
             console.log("Ese producto no existe");
