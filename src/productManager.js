@@ -23,7 +23,7 @@ class ProductManager {
         const exist = this.products.some( (product) => product.code === productoAgregar.code )
         
         if(!exist){
-            this.products.push({ ...productoAgregar, id:this.products[-1].id + 1} );
+            this.products.push({ ...productoAgregar, id:this.products[this.products.length -1].id + 1} );
             await fs.promises.writeFile(this.file, JSON.stringify(this.products), "utf-8")
             console.log("Producto agregado")
         }else{

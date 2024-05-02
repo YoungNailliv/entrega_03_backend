@@ -23,20 +23,23 @@ router.get("/:id", async(req,res) => {
 });
 
 router.post('/', async(req,res) => {
-    
-    let productToAdd = req.body;
+    const socketServer = req.app.get("socketServer");
 
+    let productToAdd = req.body;
     await manager.addProduct( ...productToAdd );
 
-    res.send( {status:200, payload:productToAdd} )
+    res.send( {status:200, payload:productToAdd} );
+    socketServer.emit("productChanged", "Se ha agregado un producto");
 });
 
 router.delete('/:pid', async(req,res) => {
+    const socketServer = req.app.get("socketServer");
     let pid = req.params.pid;
 
     await manager.deleteProduct(parseInt(pid));
     
-    res.send( {status:200, payload:"Producto Eliminado"} )
+    res.send( {status:200, payload:"Producto Eliminado"} );
+    socketServer.emit("productChanged", "Se ha eliminado el producto");
 })
 
 router.put('/:pid', async(req,res) => {
